@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { state } from "./reducer";
+import { addNote } from "./actions";
 
 function App() {
+  const notes = useSelector<state, state["notes"]>((state) => state.notes)
+  const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState(["hello"]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -11,7 +15,7 @@ function App() {
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputValue) {
-      setMessages([...messages, inputValue]);
+      dispatch(addNote(inputValue))
       setInputValue("");
     }
   };
@@ -28,9 +32,9 @@ function App() {
         <div className="px-4 py-2 border-black border-b-2">Buster</div>
       </div> */}
       <div>
-        {messages.map((m: string) => (
+        {notes.map((n: string) => (
           <>
-            {m} <br />
+            {n} <br />
           </>
         ))}
       </div>
