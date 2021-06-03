@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { state } from "./reducer";
-import { addNote } from "./actions";
+import { Note, State } from "./reducer";
+import { addNote, deleteNote } from "./actions";
 
 function App() {
-  const notes = useSelector<state, state["notes"]>((state) => state.notes)
+  const notes = useSelector<State, State["notes"]>(state => state.notes);
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
 
@@ -15,9 +15,14 @@ function App() {
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputValue) {
-      dispatch(addNote(inputValue))
+      dispatch(addNote(inputValue));
       setInputValue("");
     }
+  };
+
+  const onMessageClick = (ID: string) => {
+
+    dispatch(deleteNote(ID));
   };
 
   // const changeThread = (e) => {
@@ -32,10 +37,15 @@ function App() {
         <div className="px-4 py-2 border-black border-b-2">Buster</div>
       </div> */}
       <div>
-        {notes.map((n: string) => (
-          <>
-            {n} <br />
-          </>
+        {notes.map((n: Note, index: any) => (
+          <div
+            id={index}
+            key={index}
+            onClick={() => onMessageClick(n.ID)}
+            className='cursor-pointer p-1'
+          >
+            {n.text} <br />
+          </div>
         ))}
       </div>
       <form className='mt-8' onSubmit={handleSubmit}>
